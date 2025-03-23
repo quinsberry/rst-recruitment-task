@@ -1,0 +1,42 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int           @id @default(autoincrement())
+  firstName String?       @map("first_name") @db.VarChar(60)
+  lastName  String        @map("last_name") @db.VarChar(100)
+  initials  String?       @map("initials") @db.VarChar(30)
+  email     String        @unique @map("email") @db.VarChar(100)
+  status    String        @default("ACTIVE") @map("status") @db.VarChar(8)
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @default(now()) @updatedAt @map("updated_at")
+  addresses UserAddress[]
+
+  @@map("users")
+}
+
+model UserAddress {
+  userId         Int      @map("user_id")
+  addressType    String   @map("address_type") @db.VarChar(7)
+  validFrom      DateTime @map("valid_from")
+  postCode       String   @map("post_code") @db.VarChar(6)
+  city           String   @map("city") @db.VarChar(60)
+  countryCode    String   @map("country_code") @db.VarChar(3)
+  street         String   @map("street") @db.VarChar(100)
+  buildingNumber String   @map("building_number") @db.VarChar(60)
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @default(now()) @updatedAt @map("updated_at")
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, addressType, validFrom])
+  @@map("users_addresses")
+}

@@ -169,7 +169,7 @@ export const AddressForm: FunctionComponent<AddressFormProps> = ({ action, onSub
                         <h3 className="font-semibold mb-2">Address Preview</h3>
                         <div className="space-y-1 text-sm">
                             <p>
-                                {street}, {buildingNumber}
+                                {street} {buildingNumber}
                             </p>
                             <p>
                                 {postCode} {city}

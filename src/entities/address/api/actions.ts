@@ -74,7 +74,7 @@ export const updateAddressAction = createAction<Address, FormData>(async (prevSt
                 status: 'error',
                 message: 'Address not found',
                 error: 'Record not found',
-                data: null,
+                data: prevState.data,
             };
         }
 

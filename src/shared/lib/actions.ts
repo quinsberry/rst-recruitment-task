@@ -11,7 +11,7 @@ export const createAction = <T, P>(action: Action<T, P>) => {
 export type ActionState<T> =
     | IdleActionState<T>
     | SuccessActionState<T>
-    | ErrorActionState
+    | ErrorActionState<T>
     | ValidationErrorActionState<T>;
 export interface SuccessActionState<T> {
     status: 'success';
@@ -19,10 +19,10 @@ export interface SuccessActionState<T> {
     data: T;
 }
 
-export interface ErrorActionState {
+export interface ErrorActionState<T> {
     status: 'error';
     message: string;
-    data: null;
+    data: T | null;
     error: string;
 }
 

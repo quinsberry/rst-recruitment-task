@@ -23,29 +23,21 @@ export const AddressList: FunctionComponent<AddressListProps> = ({ addresses, Ro
                         <TableHead className="w-[70px]"></TableHead>
                     </TableRow>
                 </TableHeader>
-                <TableBody>
-                    {addresses.length > 0 ? (
-                        addresses.map((address) => (
-                            <TableRow key={address.id} className="cursor-pointer hover:bg-muted/50 h-10">
-                                <TableCell>{address.addressType}</TableCell>
-                                <TableCell className="text-center">{address.countryCode}</TableCell>
-                                <TableCell>{address.postCode}</TableCell>
-                                <TableCell>{address.city}</TableCell>
-                                <TableCell>{address.street}</TableCell>
-                                <TableCell className="text-center">{address.buildingNumber}</TableCell>
-                                <TableCell>{address.validFrom.toLocaleDateString()}</TableCell>
-                                <TableCell>
-                                    <RowAction address={address} />
-                                </TableCell>
-                            </TableRow>
-                        ))
-                    ) : (
-                        <TableRow>
-                            <TableCell colSpan={10} className="h-10 text-center">
-                                No addresses found
+                <TableBody emptyMessage="No addresses found">
+                    {addresses.map((address) => (
+                        <TableRow key={address.id} className="cursor-pointer hover:bg-muted/50 h-10">
+                            <TableCell>{address.addressType}</TableCell>
+                            <TableCell className="text-center">{address.countryCode}</TableCell>
+                            <TableCell>{address.postCode}</TableCell>
+                            <TableCell>{address.city}</TableCell>
+                            <TableCell>{address.street}</TableCell>
+                            <TableCell className="text-center">{address.buildingNumber}</TableCell>
+                            <TableCell>{address.validFrom.toLocaleDateString()}</TableCell>
+                            <TableCell>
+                                <RowAction address={address} />
                             </TableCell>
                         </TableRow>
-                    )}
+                    ))}
                 </TableBody>
             </Table>
         </div>

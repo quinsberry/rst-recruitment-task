@@ -13,11 +13,14 @@ import { Address, AddressForm } from '@/entities/address';
 import { useUserAddressesStore } from './user-addresses-store';
 import { addAddressAction } from '@/entities/address';
 import { useState } from 'react';
+import { toast } from '@/shared/components/ui/sonner';
+
 export const AddUserAddressDialog = () => {
     const { user, addAddress } = useUserAddressesStore();
     const [isOpen, setIsOpen] = useState(false);
     const handleSubmit = (data: Address) => {
         addAddress(data);
+        toast.success('Address added successfully!');
         setIsOpen(false);
     };
     return (

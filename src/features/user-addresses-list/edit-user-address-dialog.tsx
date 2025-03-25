@@ -14,6 +14,7 @@ import { AddressForm } from '@/entities/address';
 import { useUserAddressesStore } from './user-addresses-store';
 import { updateAddressAction } from '@/entities/address';
 import { useState } from 'react';
+import { toast } from '@/shared/components/ui/sonner';
 
 interface UserAddressDialogProps {
     address: Address;
@@ -24,7 +25,8 @@ export const EditUserAddressDialog = ({ address, userName }: UserAddressDialogPr
     const { updateAddress } = useUserAddressesStore();
     const [isOpen, setIsOpen] = useState(false);
     const handleSubmit = (data: Address) => {
-        updateAddress(data);
+        updateAddress(address.id, data);
+        toast.success('Address updated successfully!');
         setIsOpen(false);
     };
     return (

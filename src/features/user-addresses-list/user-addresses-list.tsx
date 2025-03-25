@@ -16,6 +16,7 @@ import { UserAddressesProvider, useUserAddressesStore } from './user-addresses-s
 import { FunctionComponent } from 'react';
 import { AddUserAddressDialog } from './add-user-address-dialog';
 import { useListPagination } from '@/shared/components/list-pagination';
+import { DeleteUserAddressButton } from './delete-user-address-button';
 
 interface UserAddressListProps {
     user: User;
@@ -23,7 +24,7 @@ interface UserAddressListProps {
 }
 
 export const List = () => {
-    const { user, addresses, deleteAddress } = useUserAddressesStore();
+    const { user, addresses } = useUserAddressesStore();
     const { paginatedItems, ListPagination } = useListPagination({ listItems: addresses, itemsPerPage: 10 });
     return (
         <div className="flex flex-col gap-4">
@@ -50,9 +51,7 @@ export const List = () => {
                                 <EditUserAddressDialog address={address} userName={user.fullName} />
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
-                                <Button variant={'ghost'} className="w-full" onClick={() => deleteAddress(address)}>
-                                    Delete
-                                </Button>
+                                <DeleteUserAddressButton address={address} />
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>

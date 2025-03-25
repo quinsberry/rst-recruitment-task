@@ -45,7 +45,6 @@ export const AddressForm: FunctionComponent<AddressFormProps> = ({ action, onSub
     const showAddressPreview = street && buildingNumber && postCode && city && countryCode;
 
     useEffect(() => {
-        console.log('state', state);
         if (state.status === 'success') {
             onSubmit?.(state.data);
         } else if (state.status === 'validationError') {
@@ -56,7 +55,7 @@ export const AddressForm: FunctionComponent<AddressFormProps> = ({ action, onSub
     }, [state.status]);
     const handleAction = async (formData: FormData) => {
         formData.append('userId', userId.toString());
-        formData.append('validFrom', form.getValues('validFrom').toJSON());
+        formData.append('validFrom', form.getValues('validFrom').toDateString());
         formAction(formData);
     };
 

@@ -40,3 +40,18 @@ docker compose up
 2. Keep the code clean, scalable, follow known conding conventions, paradigms, patterns, etc.
 3. Use TypeScript.
 4. You do not have to deploy the application, but prepare the codebase for deployment to an environment of your choice.
+
+## Setup development environment
+
+1. Clone the repository
+2. Run `cp .env.example .env` to create the environment file
+3. Run `npm install --force` to install the dependencies
+4. Run `docker compose up -d` to start the database
+5. Run `npm run prisma:generate` to generate the Prisma client
+6. Run `npm run dev` to start the development server
+
+## Deployment
+
+1. Run `./deploy.sh` to deploy the application to the production environment
+2. Run `docker compose -f docker-compose.prod.yml up -d --build` to start the production server
+

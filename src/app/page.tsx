@@ -1,5 +1,6 @@
 import { Card } from '@/shared/components/ui/card';
-import { getUserWithAddresses, UserAddressList } from '@/features/user-address-list';
+import { UserAddressList, getUserWithAddresses } from '@/widgets/users-addresses';
+
 export default async function Home() {
     const users = await getUserWithAddresses();
     return (

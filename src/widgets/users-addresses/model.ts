@@ -1,6 +1,6 @@
 import { User } from '@/entities/user';
-import { UserAddress } from '@/entities/user-address';
+import { Address } from '@/entities/address';
 
 export interface UserWithAddresses extends User {
-    addresses: UserAddress[];
+    addresses: Address[];
 }

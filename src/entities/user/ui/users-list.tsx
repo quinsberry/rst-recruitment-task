@@ -21,7 +21,7 @@ export const UsersList = <U extends User>({ users, onRowClick, RowAction }: User
                         <TableHead className="w-[70px]"></TableHead>
                     </TableRow>
                 </TableHeader>
-                <TableBody>
+                <TableBody emptyMessage="No users found">
                     {users.map((user) => (
                         <TableRow
                             key={user.id}

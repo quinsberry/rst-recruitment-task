@@ -7,26 +7,31 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/shared/components/ui/dialog';
-import { UserAddress } from '../model';
-import { UserAddressForm } from './user-address-form';
+import { Address } from '@/entities/address';
+import { AddressForm } from '@/entities/address';
+import { useUserAddressesStore } from './user-addresses-store';
 
 interface UserAddressDialogProps {
-    address: UserAddress;
+    address: Address;
     userName: string;
 }
 
 export const EditUserAddressDialog = ({ address, userName }: UserAddressDialogProps) => {
+    const { updateAddress } = useUserAddressesStore();
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant={'ghost'}>Edit address</Button>
+                <Button variant={'ghost'} className="w-full">
+                    Edit address
+                </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>Edit address</DialogTitle>
                     <DialogDescription>Edit address for {userName}</DialogDescription>
                 </DialogHeader>
-                <UserAddressForm
+                <AddressForm
+                    onSubmit={updateAddress}
                     userId={address.userId}
                     addressType={address.addressType}
                     countryCode={address.countryCode}

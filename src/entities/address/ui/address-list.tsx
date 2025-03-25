@@ -1,13 +1,13 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/components/ui/table';
 import { FunctionComponent } from 'react';
-import { UserAddress } from '../model';
+import { Address } from '../model';
 
-interface UserAddressListProps {
-    addresses: UserAddress[];
-    RowAction: FunctionComponent<{ address: UserAddress }>;
+interface AddressListProps {
+    addresses: Address[];
+    RowAction: FunctionComponent<{ address: Address }>;
 }
 
-export const UserAddressList: FunctionComponent<UserAddressListProps> = ({ addresses, RowAction }) => {
+export const AddressList: FunctionComponent<AddressListProps> = ({ addresses, RowAction }) => {
     return (
         <div className="rounded-md border">
             <Table>
@@ -20,8 +20,6 @@ export const UserAddressList: FunctionComponent<UserAddressListProps> = ({ addre
                         <TableHead>Street</TableHead>
                         <TableHead>Building number</TableHead>
                         <TableHead>Valid From</TableHead>
-                        <TableHead>Created At</TableHead>
-                        <TableHead>Updated At</TableHead>
                         <TableHead className="w-[70px]"></TableHead>
                     </TableRow>
                 </TableHeader>
@@ -36,8 +34,6 @@ export const UserAddressList: FunctionComponent<UserAddressListProps> = ({ addre
                                 <TableCell>{address.street}</TableCell>
                                 <TableCell className="text-center">{address.buildingNumber}</TableCell>
                                 <TableCell>{address.validFrom.toLocaleDateString()}</TableCell>
-                                <TableCell>{address.createdAt.toLocaleDateString()}</TableCell>
-                                <TableCell>{address.updatedAt.toLocaleDateString()}</TableCell>
                                 <TableCell>
                                     <RowAction address={address} />
                                 </TableCell>

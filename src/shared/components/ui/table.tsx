@@ -3,6 +3,7 @@
 import * as React from 'react';
 
 import { cn } from '@/shared/lib/utils';
+import { Loader2 } from 'lucide-react';
 
 function Table({ className, ...props }: React.ComponentProps<'table'>) {
     return (
@@ -16,9 +17,33 @@ function TableHeader({ className, ...props }: React.ComponentProps<'thead'>) {
     return <thead data-slot="table-header" className={cn('[&_tr]:border-b', className)} {...props} />;
 }
 
-function TableBody({ className, ...props }: React.ComponentProps<'tbody'>) {
-    return <tbody data-slot="table-body" className={cn('[&_tr:last-child]:border-0', className)} {...props} />;
+interface TableBodyProps extends React.HTMLAttributes<HTMLTableSectionElement> {
+    isInProgress?: boolean;
+    emptyMessage?: React.ReactNode;
 }
+const TableBody = React.forwardRef<HTMLTableSectionElement, TableBodyProps>(
+    ({ className, isInProgress = false, emptyMessage = 'No data', children, ...props }, ref) => (
+        <tbody ref={ref} className={cn('[&_tr:last-child]:border-0', className)} {...props}>
+            {isInProgress ? (
+                <TableRow className="h-15">
+                    <TableCell colSpan={100} className="h-full w-full">
+                        <div className="flex justify-center items-center">
+                            <Loader2 size={26} className="animate-spin" />
+                        </div>
+                    </TableCell>
+                </TableRow>
+            ) : React.Children.count(children) === 0 ? (
+                <TableRow className="h-15">
+                    <TableCell colSpan={100} className="h-full w-full text-center">
+                        {emptyMessage}
+                    </TableCell>
+                </TableRow>
+            ) : (
+                children
+            )}
+        </tbody>
+    ),
+);
 
 function TableFooter({ className, ...props }: React.ComponentProps<'tfoot'>) {
     return (

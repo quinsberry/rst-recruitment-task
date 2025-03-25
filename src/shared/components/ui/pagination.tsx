@@ -22,8 +22,18 @@ function PaginationContent({ className, ...props }: React.ComponentProps<'ul'>) 
     );
 }
 
-function PaginationItem({ ...props }: React.ComponentProps<'li'>) {
-    return <li data-slot="pagination-item" {...props} />;
+interface PaginationItemProps extends React.ComponentProps<'li'> {
+    disabled?: boolean;
+}
+function PaginationItem({ disabled, ...props }: PaginationItemProps) {
+    return (
+        <li
+            data-slot="pagination-item"
+            {...props}
+            aria-disabled={disabled}
+            className={cn(props.className, disabled && 'opacity-50 pointer-events-none')}
+        />
+    );
 }
 
 type PaginationLinkProps = {

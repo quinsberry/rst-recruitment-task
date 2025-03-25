@@ -19,7 +19,7 @@ import { useListPagination } from '@/shared/components/list-pagination';
 
 interface UserAddressListProps {
     user: User;
-    addresses: Address[];
+    addresses?: Address[];
 }
 
 export const List = () => {
@@ -65,7 +65,7 @@ export const List = () => {
 
 export const UserAddressList: FunctionComponent<UserAddressListProps> = ({ addresses, user }) => {
     return (
-        <UserAddressesProvider initialAddresses={addresses} user={user}>
+        <UserAddressesProvider initialAddresses={addresses ?? []} user={user}>
             <List />
         </UserAddressesProvider>
     );

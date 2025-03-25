@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/shared/components/ui/button';
 import {
     Dialog,
@@ -10,6 +12,8 @@ import {
 import { Address } from '@/entities/address';
 import { AddressForm } from '@/entities/address';
 import { useUserAddressesStore } from './user-addresses-store';
+import { updateAddressAction } from '@/entities/address';
+import { useState } from 'react';
 
 interface UserAddressDialogProps {
     address: Address;
@@ -18,8 +22,13 @@ interface UserAddressDialogProps {
 
 export const EditUserAddressDialog = ({ address, userName }: UserAddressDialogProps) => {
     const { updateAddress } = useUserAddressesStore();
+    const [isOpen, setIsOpen] = useState(false);
+    const handleSubmit = (data: Address) => {
+        updateAddress(data);
+        setIsOpen(false);
+    };
     return (
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
                 <Button variant={'ghost'} className="w-full">
                     Edit address
@@ -31,15 +40,10 @@ export const EditUserAddressDialog = ({ address, userName }: UserAddressDialogPr
                     <DialogDescription>Edit address for {userName}</DialogDescription>
                 </DialogHeader>
                 <AddressForm
-                    onSubmit={updateAddress}
+                    action={updateAddressAction}
+                    onSubmit={handleSubmit}
                     userId={address.userId}
-                    addressType={address.addressType}
-                    countryCode={address.countryCode}
-                    postCode={address.postCode}
-                    city={address.city}
-                    street={address.street}
-                    buildingNumber={address.buildingNumber}
-                    validFrom={address.validFrom}
+                    data={address}
                 />
             </DialogContent>
         </Dialog>

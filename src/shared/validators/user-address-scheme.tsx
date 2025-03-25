@@ -7,6 +7,7 @@ export const addressTypeScheme = z.union([
     z.literal('POST'),
     z.literal('WORK'),
 ]);
+export type AddressType = z.infer<typeof addressTypeScheme>;
 export const userAddressScheme = z.object({
     addressType: addressTypeScheme,
     postCode: z.string().length(6, { message: 'Post code must be exactly 6 characters long' }),
@@ -14,5 +15,5 @@ export const userAddressScheme = z.object({
     street: z.string().min(1, { message: 'Street is required' }),
     buildingNumber: z.string().min(1, { message: 'Building number is required' }),
     countryCode: z.string().regex(iso3166Alpha3Pattern, 'Invalid country code (ISO3166-1 alpha-3)'),
-    validFrom: z.date(),
+    validFrom: z.coerce.date({ message: 'You should select the date from which the address is valid' }),
 });

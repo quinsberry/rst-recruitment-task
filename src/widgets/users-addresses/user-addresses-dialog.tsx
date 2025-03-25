@@ -8,7 +8,7 @@ import { UserAddressList } from '@/features/user-addresses-list';
 interface UserAddressDialogProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    addresses: Address[];
+    addresses?: Address[];
     user: User;
 }
 

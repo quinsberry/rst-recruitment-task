@@ -14,6 +14,7 @@ export const addAddressAction = createAction<Address, FormData>(async (prevState
             status: 'validationError',
             message: 'Validation failed',
             validationErrors: parsed.error.flatten(),
+            data: null,
         };
     }
 
@@ -36,6 +37,7 @@ export const addAddressAction = createAction<Address, FormData>(async (prevState
                 status: 'error',
                 message: 'Failed to add address',
                 error: error.message,
+                data: null,
             };
         }
         throw error;
@@ -51,16 +53,18 @@ export const updateAddressAction = createAction<Address, FormData>(async (prevSt
             status: 'validationError',
             message: 'Validation failed',
             validationErrors: parsed.error.flatten(),
+            data: null,
         };
     }
 
     try {
+        // TODO: fix issues with the validFrom date
         const userAddress = await db.userAddress.update({
             where: {
                 userId_addressType_validFrom: {
                     userId: parseInt(formData.userId as string),
-                    addressType: formData.addressType as string,
-                    validFrom: new Date(formData.validFrom as string),
+                    addressType: prevState.data?.addressType!,
+                    validFrom: new Date(prevState.data?.validFrom!),
                 },
             },
             data: {
@@ -79,6 +83,7 @@ export const updateAddressAction = createAction<Address, FormData>(async (prevSt
                 status: 'error',
                 message: 'Failed to update address',
                 error: error.message,
+                data: null,
             };
         }
         throw error;

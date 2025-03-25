@@ -1,40 +1,40 @@
 'use client';
 
 import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/shared/components/ui/form';
-import { FunctionComponent, useActionState, useEffect, useRef } from 'react';
+import { FunctionComponent, useActionState, useEffect } from 'react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/components/ui/select';
 import { addressTypeScheme, userAddressScheme } from '@/shared/validators/user-address-scheme';
 import { Address } from '../model';
-import { addAddressAction } from '../api/actions';
 import { Input } from '@/shared/components/ui/input';
 import { Button } from '@/shared/components/ui/button';
 import { DatePicker } from '@/shared/components/ui/date-picker';
+import { Action } from '@/shared/lib/actions';
 
-interface AddressFormProps extends Partial<Omit<Address, 'id' | 'createdAt' | 'updatedAt'>> {
+interface AddressFormProps {
     userId: Address['userId'];
+    data?: Address;
+    action: Action<Address, FormData>;
     onSubmit: (data: Address) => void;
 }
 
-export const AddressForm: FunctionComponent<AddressFormProps> = (props) => {
-    const formRef = useRef<HTMLFormElement>(null);
-    const [state, formAction, isPending] = useActionState(addAddressAction, {
+export const AddressForm: FunctionComponent<AddressFormProps> = ({ action, onSubmit, userId, data }) => {
+    const [state, formAction, isPending] = useActionState(action, {
         message: '',
         status: 'idle',
+        data: data ?? null,
     });
 
     const form = useForm<z.infer<typeof userAddressScheme>>({
-        resolver: zodResolver(userAddressScheme),
         defaultValues: {
-            addressType: props.addressType ?? 'HOME',
-            postCode: props.postCode ?? '',
-            city: props.city ?? '',
-            street: props.street ?? '',
-            buildingNumber: props.buildingNumber ?? '',
-            countryCode: props.countryCode ?? '',
-            validFrom: props.validFrom ?? new Date(),
+            addressType: data?.addressType ?? 'HOME',
+            postCode: data?.postCode ?? '',
+            city: data?.city ?? '',
+            street: data?.street ?? '',
+            buildingNumber: data?.buildingNumber ?? '',
+            countryCode: data?.countryCode ?? '',
+            validFrom: data?.validFrom ?? new Date(),
         },
     });
     const street = form.watch('street');
@@ -45,20 +45,24 @@ export const AddressForm: FunctionComponent<AddressFormProps> = (props) => {
     const showAddressPreview = street && buildingNumber && postCode && city && countryCode;
 
     useEffect(() => {
+        console.log('state', state);
         if (state.status === 'success') {
-            props.onSubmit?.(state.data);
+            onSubmit?.(state.data);
+        } else if (state.status === 'validationError') {
+            Object.entries(state.validationErrors.fieldErrors).forEach(([field, error]) => {
+                form.setError(field as keyof z.infer<typeof userAddressScheme>, { message: error.join(', ') });
+            });
         }
     }, [state.status]);
-
-    const handleSubmit = form.handleSubmit(async () => {
-        const formData = new FormData(formRef.current!);
-        formData.append('userId', props.userId.toString());
+    const handleAction = async (formData: FormData) => {
+        formData.append('userId', userId.toString());
+        formData.append('validFrom', form.getValues('validFrom').toJSON());
         formAction(formData);
-    });
+    };
 
     return (
         <Form {...form}>
-            <form ref={formRef} action={formAction} onSubmit={handleSubmit} className="space-y-6">
+            <form action={handleAction} className="space-y-6">
                 <FormField
                     control={form.control}
                     name="addressType"
@@ -155,7 +159,7 @@ export const AddressForm: FunctionComponent<AddressFormProps> = (props) => {
                     render={({ field }) => (
                         <FormItem className="flex flex-col">
                             <FormLabel>Valid from</FormLabel>
-                            <DatePicker date={field.value} setDate={field.onChange} />
+                            <DatePicker date={field.value} setDate={field.onChange} {...field} />
                             <FormMessage />
                         </FormItem>
                     )}
@@ -175,8 +179,9 @@ export const AddressForm: FunctionComponent<AddressFormProps> = (props) => {
                         </div>
                     </div>
                 )}
-                <Button type="submit" className="" isInProgress={isPending}>
-                    Add
+                {state.status === 'error' && <p className="text-destructive text-center">{state.message}</p>}
+                <Button type="submit" className="w-full" isInProgress={isPending}>
+                    Save
                 </Button>
             </form>
         </Form>

@@ -30,7 +30,6 @@ function PaginationItem({ disabled, ...props }: PaginationItemProps) {
         <li
             data-slot="pagination-item"
             {...props}
-            aria-disabled={disabled}
             className={cn(props.className, disabled && 'opacity-50 pointer-events-none')}
         />
     );

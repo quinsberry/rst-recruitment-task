@@ -44,6 +44,7 @@ const TableBody = React.forwardRef<HTMLTableSectionElement, TableBodyProps>(
         </tbody>
     ),
 );
+TableBody.displayName = 'TableBody';
 
 function TableFooter({ className, ...props }: React.ComponentProps<'tfoot'>) {
     return (

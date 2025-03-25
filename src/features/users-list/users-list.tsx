@@ -1,6 +1,5 @@
 'use client';
 
-import { FunctionComponent } from 'react';
 import { User, UsersList as UserList } from '@/entities/user';
 import {
     DropdownMenu,
@@ -13,11 +12,11 @@ import { Button } from '@/shared/components/ui/button';
 import { UsersProvider, useUsersStore } from './users-store';
 import { useListPagination } from '@/shared/components/list-pagination';
 
-interface ListProps<T extends User> {
-    onRowClick?: (user: T) => void;
+interface ListProps {
+    onRowClick?: (user: User) => void;
 }
-const List = <T extends User>({ onRowClick }: ListProps<T>) => {
-    const { users, addUser, updateUser, deleteUser } = useUsersStore<T>();
+const List = ({ onRowClick }: ListProps) => {
+    const { users } = useUsersStore();
     const { paginatedItems, ListPagination } = useListPagination({ listItems: users, itemsPerPage: 10 });
     return (
         <div className="flex flex-col gap-4">
@@ -58,11 +57,11 @@ const List = <T extends User>({ onRowClick }: ListProps<T>) => {
     );
 };
 
-interface UsersListProps<T extends User> extends ListProps<T> {
+interface UsersListProps extends ListProps {
     users: User[];
 }
 
-export const UsersList = <T extends User>({ users, onRowClick }: UsersListProps<T>) => {
+export const UsersList = ({ users, onRowClick }: UsersListProps) => {
     return (
         <UsersProvider initialUsers={users}>
             <List onRowClick={onRowClick} />

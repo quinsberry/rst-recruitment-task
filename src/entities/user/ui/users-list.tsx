@@ -3,13 +3,13 @@ import { Badge } from '@/shared/components/ui/badge';
 import { FunctionComponent } from 'react';
 import { User } from '../model';
 
-interface UsersListProps<U extends User> {
-    users: U[];
-    onRowClick?: (user: U) => void;
-    RowAction: FunctionComponent<{ user: U }>;
+interface UsersListProps {
+    users: User[];
+    onRowClick?: (user: User) => void;
+    RowAction: FunctionComponent<{ user: User }>;
 }
 
-export const UsersList = <U extends User>({ users, onRowClick, RowAction }: UsersListProps<U>) => {
+export const UsersList = ({ users, onRowClick, RowAction }: UsersListProps) => {
     return (
         <div className="rounded-md border">
             <Table>

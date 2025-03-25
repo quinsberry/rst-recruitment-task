@@ -1,4 +1,5 @@
-import { User } from '@/entities/user';
+'use client';
+
 import { Button } from '@/shared/components/ui/button';
 import {
     Dialog,
@@ -8,13 +9,19 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/shared/components/ui/dialog';
-import { AddressForm } from '@/entities/address';
+import { Address, AddressForm } from '@/entities/address';
 import { useUserAddressesStore } from './user-addresses-store';
-
+import { addAddressAction } from '@/entities/address';
+import { useState } from 'react';
 export const AddUserAddressDialog = () => {
     const { user, addAddress } = useUserAddressesStore();
+    const [isOpen, setIsOpen] = useState(false);
+    const handleSubmit = (data: Address) => {
+        addAddress(data);
+        setIsOpen(false);
+    };
     return (
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
                 <Button>Add address</Button>
             </DialogTrigger>
@@ -23,7 +30,7 @@ export const AddUserAddressDialog = () => {
                     <DialogTitle>Add address</DialogTitle>
                     <DialogDescription>Add a new address for {user.fullName}</DialogDescription>
                 </DialogHeader>
-                <AddressForm userId={user.id} onSubmit={addAddress} />
+                <AddressForm userId={user.id} onSubmit={handleSubmit} action={addAddressAction} />
             </DialogContent>
         </Dialog>
     );

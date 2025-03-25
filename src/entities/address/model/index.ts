@@ -9,7 +9,10 @@ export interface Address extends AddressDB {
 export const convertToAddress = (address: AddressDB): Address => {
     return {
         ...address,
-        id: `${address.userId}-${address.addressType}-${address.validFrom.getTime()}`,
+        id: `${address.userId}-${address.addressType}-${address.validFrom}`,
         addressType: addressTypeScheme.parse(address.addressType),
+        validFrom: new Date(address.validFrom),
+        createdAt: new Date(address.createdAt),
+        updatedAt: new Date(address.updatedAt),
     };
 };

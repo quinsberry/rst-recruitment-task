@@ -1,5 +1,5 @@
-import { createContext, useContext, useState } from 'react';
-import { Address } from '@/entities/address';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { Address, deleteClientUserAddress, getUserAddresses } from '@/entities/address';
 import { User } from '@/entities/user';
 
 interface UserAddressesStore {
@@ -21,6 +21,12 @@ interface UserAddressesProviderProps {
 export const UserAddressesProvider = ({ initialAddresses, user, children }: UserAddressesProviderProps) => {
     const [addresses, setAddresses] = useState<Address[]>(initialAddresses);
 
+    useEffect(() => {
+        getUserAddresses(user.id).then((addresses) => {
+            setAddresses(addresses);
+        });
+    }, [user.id]);
+
     const addAddress = (address: Address) => {
         setAddresses((prev) => [...prev, address]);
     };
@@ -28,7 +34,9 @@ export const UserAddressesProvider = ({ initialAddresses, user, children }: User
         setAddresses((prev) => prev.map((a) => (a.id === address.id ? address : a)));
     };
     const deleteAddress = (address: Address) => {
-        setAddresses((prev) => prev.filter((a) => a.id !== address.id));
+        deleteClientUserAddress(user.id, address.addressType, address.validFrom).then(() => {
+            setAddresses((prev) => prev.filter((a) => a.id !== address.id));
+        });
     };
 
     return (

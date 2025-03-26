@@ -41,7 +41,7 @@ docker compose up
 3. Use TypeScript.
 4. You do not have to deploy the application, but prepare the codebase for deployment to an environment of your choice.
 
-## Setup development environment
+## Setup dev
 
 1. Clone the repository
 2. Run `cp .env.example .env` to create the environment file
@@ -50,8 +50,10 @@ docker compose up
 5. Run `npm run prisma:generate` to generate the Prisma client
 6. Run `npm run dev` to start the development server
 
-## Deployment
+## Deploy
 
 1. Run `./deploy.sh` to deploy the application to the production environment
+2. Run `cp .env.prod .env` to create the environment file
 2. Run `docker compose -f docker-compose.prod.yml up -d --build` to start the production server
+3. Run `docker compose -f docker-compose.prod.yml exec app npx prisma migrate deploy` to deploy the database migrations
 

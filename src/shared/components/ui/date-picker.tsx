@@ -31,6 +31,7 @@ export const DatePicker: FunctionComponent<DatePickerProps> = ({ formatter = def
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
+                {/* @ts-expect-error TODO: fix onSelect type */}
                 <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
             </PopoverContent>
         </Popover>

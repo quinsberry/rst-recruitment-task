@@ -2,6 +2,8 @@ import { Card } from '@/shared/components/ui/card';
 import { UserAddressList, getUserWithAddresses } from '@/widgets/users-addresses';
 import { Suspense } from 'react';
 
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
     const users = await getUserWithAddresses();
     return (

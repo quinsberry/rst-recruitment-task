@@ -15,13 +15,11 @@ interface UserAddressDialogProps {
 export const UserAddressDialog = ({ addresses, user, open, onOpenChange }: UserAddressDialogProps) => {
     return (
         <Dialog open={open} onOpenChange={onOpenChange} modal={false}>
-            <DialogContent className="min-w-fit pt-8">
+            <DialogContent className="w-full sm:max-w-3xl pt-8">
                 <DialogHeader>
                     <DialogTitle className="sr-only">{user.fullName} addresses</DialogTitle>
                 </DialogHeader>
-                <div className="flex flex-col gap-4">
-                    <UserAddressList addresses={addresses} user={user} />
-                </div>
+                <UserAddressList addresses={addresses} user={user} />
             </DialogContent>
         </Dialog>
     );

@@ -27,9 +27,9 @@ export const List = () => {
     const { user, addresses } = useUserAddressesStore();
     const { paginatedItems, ListPagination } = useListPagination({ listItems: addresses, itemsPerPage: 10 });
     return (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 w-full overflow-x-auto">
             <div className="flex justify-between items-center">
-                <h1 className="text-2xl font-bold">{user.fullName} addresses</h1>
+                <h1 className="text-xl sm:text-2xl font-bold">{user.fullName} addresses</h1>
                 <AddUserAddressDialog />
             </div>
             <AddressList

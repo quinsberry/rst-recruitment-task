@@ -2,6 +2,7 @@ import { db } from '@/shared/lib/db';
 import { UserWithAddresses } from './model';
 import { convertToAddress } from '@/entities/address/model';
 import { getUserFullName } from '@/entities/user/model';
+
 export const getUserWithAddresses = async (): Promise<UserWithAddresses[]> => {
     const response = await db.user.findMany({
         include: {

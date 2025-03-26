@@ -19,9 +19,9 @@ const List = ({ onRowClick }: ListProps) => {
     const { users } = useUsersStore();
     const { paginatedItems, ListPagination } = useListPagination({ listItems: users, itemsPerPage: 10 });
     return (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 w-full">
             <div className="flex justify-between items-center">
-                <h1 className="text-2xl font-bold">Users with addresses</h1>
+                <h1 className="text-xl sm:text-2xl font-bold">Users with addresses</h1>
                 <Button onClick={() => {}}>Create User</Button>
             </div>
             <UserList

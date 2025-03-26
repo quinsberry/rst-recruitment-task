@@ -46,13 +46,12 @@ docker compose up
 1. Clone the repository
 2. Run `cp .env.example .env` to create the environment file
 3. Run `npm install --force` to install the dependencies
-4. Run `docker compose up -d` to start the database
+4. Run `docker compose up -d` to start the database (if db is empty run `docker compose down -v && docker compose up -d`)
 5. Run `npm run prisma:generate` to generate the Prisma client
 6. Run `npm run dev` to start the development server
 
 ## Deploy
 
-1. Run `./deploy.sh` to deploy the application to the production environment
 2. Run `cp .env.prod .env` to create the environment file
 2. Run `docker compose -f docker-compose.prod.yml up -d --build` to start the production server
 3. Run `docker compose -f docker-compose.prod.yml exec app npx prisma migrate deploy` to deploy the database migrations

@@ -5,6 +5,7 @@ import { User } from '@/entities/user';
 interface UserAddressesStore {
     addresses: Address[];
     user: User;
+    isAddressesLoading: boolean;
     addAddress: (address: Address) => void;
     updateAddress: (id: string, address: Address) => void;
     deleteAddress: (address: Address) => void;
@@ -20,11 +21,17 @@ interface UserAddressesProviderProps {
 
 export const UserAddressesProvider = ({ initialAddresses, user, children }: UserAddressesProviderProps) => {
     const [addresses, setAddresses] = useState<Address[]>(initialAddresses);
+    const [isAddressesLoading, setIsAddressesLoading] = useState(false);
 
     useEffect(() => {
-        getUserAddresses(user.id).then((addresses) => {
-            setAddresses(addresses);
-        });
+        setIsAddressesLoading(true);
+        getUserAddresses(user.id)
+            .then((addresses) => {
+                setAddresses(addresses);
+            })
+            .finally(() => {
+                setIsAddressesLoading(false);
+            });
     }, [user.id]);
 
     const addAddress = (address: Address) => {
@@ -38,7 +45,7 @@ export const UserAddressesProvider = ({ initialAddresses, user, children }: User
     };
 
     return (
-        <UserAddressesStoreContext.Provider value={{ user, addresses, addAddress, updateAddress, deleteAddress }}>
+        <UserAddressesStoreContext.Provider value={{ user, addresses, isAddressesLoading, addAddress, updateAddress, deleteAddress }}>
             {children}
         </UserAddressesStoreContext.Provider>
     );

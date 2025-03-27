@@ -4,10 +4,11 @@ import { Address } from '../model';
 
 interface AddressListProps {
     addresses: Address[];
+    isLoading?: boolean;
     RowAction: FunctionComponent<{ address: Address }>;
 }
 
-export const AddressList: FunctionComponent<AddressListProps> = ({ addresses, RowAction }) => {
+export const AddressList: FunctionComponent<AddressListProps> = ({ addresses, RowAction, isLoading }) => {
     return (
         <div className="rounded-md border">
             <Table>
@@ -23,7 +24,7 @@ export const AddressList: FunctionComponent<AddressListProps> = ({ addresses, Ro
                         <TableHead className="w-[70px]"></TableHead>
                     </TableRow>
                 </TableHeader>
-                <TableBody emptyMessage="No addresses found">
+                <TableBody emptyMessage="No addresses found" isInProgress={isLoading}>
                     {addresses.map((address) => (
                         <TableRow key={address.id} className="cursor-pointer hover:bg-muted/50 h-10">
                             <TableCell>{address.addressType}</TableCell>

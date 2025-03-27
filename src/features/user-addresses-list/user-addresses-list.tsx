@@ -24,7 +24,7 @@ interface UserAddressListProps {
 }
 
 export const List = () => {
-    const { user, addresses } = useUserAddressesStore();
+    const { user, addresses, isAddressesLoading } = useUserAddressesStore();
     const { paginatedItems, ListPagination } = useListPagination({ listItems: addresses, itemsPerPage: 10 });
     return (
         <div className="flex flex-col gap-4 w-full overflow-x-auto">
@@ -34,6 +34,7 @@ export const List = () => {
             </div>
             <AddressList
                 addresses={paginatedItems}
+                isLoading={isAddressesLoading}
                 RowAction={({ address }) => (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>

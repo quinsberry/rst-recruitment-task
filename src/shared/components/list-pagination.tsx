@@ -41,7 +41,7 @@ export const ListPagination: FunctionComponent<ListPaginationProps> = ({
                             </PaginationLink>
                         </PaginationItem>
                     ))}{' '}
-                    <PaginationItem disabled={currentPage === totalPages}>
+                    <PaginationItem disabled={!totalPages || currentPage === totalPages}>
                         <PaginationNext href="#" onClick={nextPage} />
                     </PaginationItem>
                 </PaginationContent>

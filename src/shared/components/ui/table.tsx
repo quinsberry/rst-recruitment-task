@@ -33,8 +33,8 @@ const TableBody = React.forwardRef<HTMLTableSectionElement, TableBodyProps>(
                     </TableCell>
                 </TableRow>
             ) : React.Children.count(children) === 0 ? (
-                <TableRow className="h-15">
-                    <TableCell colSpan={100} className="h-full w-full text-center">
+                <TableRow className="h-15 hover:bg-background">
+                    <TableCell colSpan={100} className="h-full w-full text-center ">
                         {emptyMessage}
                     </TableCell>
                 </TableRow>

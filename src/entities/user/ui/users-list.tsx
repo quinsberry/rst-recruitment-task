@@ -10,6 +10,11 @@ interface UsersListProps {
 }
 
 export const UsersList = ({ users, onRowClick, RowAction }: UsersListProps) => {
+    const rows: (User | null)[] = users.length
+        ? Array(10)
+              .fill(null)
+              .map((_, index) => users[index] || null)
+        : [];
     return (
         <div className="rounded-md border">
             <Table>
@@ -21,24 +26,30 @@ export const UsersList = ({ users, onRowClick, RowAction }: UsersListProps) => {
                         <TableHead className="w-[70px]"></TableHead>
                     </TableRow>
                 </TableHeader>
-                <TableBody emptyMessage="No users found">
-                    {users.map((user) => (
-                        <TableRow
-                            key={user.id}
-                            onClick={() => onRowClick?.(user)}
-                            className="cursor-pointer hover:bg-muted/50 h-10">
-                            <TableCell>
-                                {user.firstName} {user.lastName}
-                            </TableCell>
-                            <TableCell>{user.email}</TableCell>
-                            <TableCell>
-                                <Badge>{user.status}</Badge>
-                            </TableCell>
-                            <TableCell>
-                                <RowAction user={user} />
-                            </TableCell>
-                        </TableRow>
-                    ))}
+                <TableBody emptyMessage="No users found" className="h-[500px]">
+                    {rows.map((user, index) =>
+                        user ? (
+                            <TableRow
+                                key={user.id}
+                                onClick={() => onRowClick?.(user)}
+                                className="cursor-pointer hover:bg-muted/50 h-[50px]">
+                                <TableCell>
+                                    {user.firstName} {user.lastName}
+                                </TableCell>
+                                <TableCell>{user.email}</TableCell>
+                                <TableCell>
+                                    <Badge>{user.status}</Badge>
+                                </TableCell>
+                                <TableCell>
+                                    <RowAction user={user} />
+                                </TableCell>
+                            </TableRow>
+                        ) : (
+                            <TableRow key={`empty-${index}`} className="h-[50px] hover:bg-background">
+                                <TableCell colSpan={4}></TableCell>
+                            </TableRow>
+                        ),
+                    )}
                 </TableBody>
             </Table>
         </div>

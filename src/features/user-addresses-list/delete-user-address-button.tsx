@@ -11,7 +11,7 @@ export function DeleteUserAddressButton({ address }: { address: Address }) {
     const [state, formAction, isPending] = useActionState(deleteAddressAction, {
         status: 'idle',
         message: '',
-        data: address,
+        data: null,
     });
 
     useEffect(() => {
@@ -32,7 +32,7 @@ export function DeleteUserAddressButton({ address }: { address: Address }) {
 
     return (
         <form action={handleAction}>
-            <Button type="submit" variant={'ghost'} isInProgress={isPending} className="w-full">
+            <Button type="submit" variant={'ghost'} isInProgress={isPending} className="w-full text-destructive hover:text-destructive">
                 Delete
             </Button>
         </form>

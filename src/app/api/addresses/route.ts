@@ -11,6 +11,9 @@ export async function GET(req: NextRequest) {
             where: {
                 userId: parseInt(userId),
             },
+            orderBy: {
+                validFrom: 'desc',
+            },
         });
         return NextResponse.json({
             data: addresses,

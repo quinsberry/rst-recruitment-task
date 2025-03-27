@@ -29,7 +29,7 @@ export interface ErrorActionState<T> {
 export interface ValidationErrorActionState<T> {
     status: 'validationError';
     message: string;
-    data: null;
+    data: T | null;
     validationErrors: typeToFlattenedError<T>;
 }
 

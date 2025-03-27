@@ -53,23 +53,32 @@ export const updateAddressAction = createAction<Address, FormData>(async (prevSt
             status: 'validationError',
             message: 'Validation failed',
             validationErrors: parsed.error.flatten(),
-            data: null,
+            data: prevState.data,
         };
     }
 
     if (!prevState.data) {
-        throw new Error('Address not found');
+        throw new Error('Data from previous state is missing');
     }
+
     try {
-        const existingAddress = await db.userAddress.findFirst({
+        const validFromDate = new Date(prevState.data.validFrom);
+        const startOfSecond = new Date(validFromDate.setMilliseconds(0));
+        const endOfSecond = new Date(validFromDate.setMilliseconds(999));
+
+        const [userAddress] = await db.userAddress.updateManyAndReturn({
             where: {
                 userId: parseInt(formData.userId as string),
                 addressType: prevState.data.addressType,
-                validFrom: prevState.data.validFrom,
+                validFrom: {
+                    gte: startOfSecond,
+                    lte: endOfSecond,
+                },
             },
+            data: parsed.data,
         });
 
-        if (!existingAddress) {
+        if (!userAddress) {
             return {
                 status: 'error',
                 message: 'Address not found',
@@ -78,20 +87,6 @@ export const updateAddressAction = createAction<Address, FormData>(async (prevSt
             };
         }
 
-        const userAddress = await db.userAddress.update({
-            where: {
-                userId_addressType_validFrom: {
-                    userId: parseInt(formData.userId as string),
-                    addressType: prevState.data.addressType,
-                    validFrom: existingAddress.validFrom,
-                },
-            },
-            data: {
-                ...parsed.data,
-                validFrom: new Date(parsed.data.validFrom),
-            },
-        });
-
         return {
             status: 'success',
             message: 'Address updated successfully',
@@ -99,18 +94,19 @@ export const updateAddressAction = createAction<Address, FormData>(async (prevSt
         };
     } catch (error) {
         if (error instanceof Error) {
+            console.error(error);
             return {
                 status: 'error',
                 message: 'Failed to update address',
                 error: error.message,
-                data: null,
+                data: prevState.data,
             };
         }
         throw error;
     }
 });
 
-export const deleteAddressAction = createAction<Address, FormData>(async (prevState, data) => {
+export const deleteAddressAction = createAction<null, FormData>(async (prevState, data) => {
     const formData = Object.fromEntries(data);
     const parsed = userAddressScheme.safeParse(formData);
 
@@ -122,18 +118,24 @@ export const deleteAddressAction = createAction<Address, FormData>(async (prevSt
             data: null,
         };
     }
-    console.log('formData.userId', formData.userId);
-    console.log('parsed.data', parsed.data);
 
     try {
-        const address = await db.userAddress.findFirst({
+        const validFromDate = new Date(parsed.data.validFrom);
+        const startOfSecond = new Date(validFromDate.setMilliseconds(0));
+        const endOfSecond = new Date(validFromDate.setMilliseconds(999));
+
+        const deletedAddress = await db.userAddress.deleteMany({
             where: {
                 userId: parseInt(formData.userId as string),
                 addressType: parsed.data.addressType,
-                validFrom: parsed.data.validFrom,
+                validFrom: {
+                    gte: startOfSecond,
+                    lte: endOfSecond,
+                },
             },
         });
-        if (!address) {
+
+        if (deletedAddress.count === 0) {
             return {
                 status: 'error',
                 message: 'Address not found',
@@ -141,19 +143,11 @@ export const deleteAddressAction = createAction<Address, FormData>(async (prevSt
                 data: null,
             };
         }
-        const deletedAddress = await db.userAddress.delete({
-            where: {
-                userId_addressType_validFrom: {
-                    userId: address.userId,
-                    addressType: address.addressType,
-                    validFrom: address.validFrom,
-                },
-            },
-        });
+
         return {
             status: 'success',
             message: 'Address deleted successfully',
-            data: convertToAddress(deletedAddress),
+            data: null,
         };
     } catch (error) {
         if (error instanceof Error) {

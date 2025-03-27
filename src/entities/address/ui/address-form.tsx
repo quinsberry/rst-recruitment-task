@@ -55,7 +55,7 @@ export const AddressForm: FunctionComponent<AddressFormProps> = ({ action, onSub
     }, [state.status]);
     const handleAction = async (formData: FormData) => {
         formData.append('userId', userId.toString());
-        formData.append('validFrom', form.getValues('validFrom').toDateString());
+        formData.append('validFrom', form.getValues('validFrom').toISOString());
         formAction(formData);
     };
 
@@ -179,7 +179,7 @@ export const AddressForm: FunctionComponent<AddressFormProps> = ({ action, onSub
                     </div>
                 )}
                 {state.status === 'error' && <p className="text-destructive text-center">{state.message}</p>}
-                <Button type="submit" className="w-full" isInProgress={isPending}>
+                <Button type="submit" className="w-full" isInProgress={isPending} disabled={!form.formState.isDirty}>
                     Save
                 </Button>
             </form>
